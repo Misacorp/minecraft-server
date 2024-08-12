@@ -56,7 +56,7 @@ const minecraftEnv = {
   TYPE: "paper",
   VERSION: "1.21.1",
   SERVER_NAME: "Kummituskoalition Kaivostaito",
-  MOTD: "Moro nääs",
+  MOTD: "Kummituskoalition Kaivostaito",
   DIFFICULTY: "normal",
   ICON: "https://cdn.discordapp.com/icons/759362928276537410/800dea802edb6e99289f2bda1a9cdf71.png",
   OVERWRITE_ICON: "TRUE",
@@ -71,8 +71,8 @@ const minecraftEnv = {
 
 const autoStopEnv = {
   ENABLE_AUTOSTOP: "TRUE",
-  AUTOSTOP_TIMEOUT_EST: "600",
-  AUTOSTOP_TIMEOUT_INIT: "600",
+  AUTOSTOP_TIMEOUT_EST: "120",
+  AUTOSTOP_TIMEOUT_INIT: "120",
   AUTOSTOP_PKILL_USE_SUDO: "TRUE",
   USES_PROXY_PROTOCOL: enableProxy ? "TRUE" : "FALSE",
 }
