@@ -1,0 +1,11 @@
+{
+  "file": "/data/config/Geyser-Fabric/config.yml",
+  "ops": [
+    {
+      "$set": {
+        "path": "$.bedrock.address",
+        "value": "fly-global-services",
+      }
+    }
+  ]
+}

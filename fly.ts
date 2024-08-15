@@ -10,13 +10,14 @@ const
   // Specifically, you need to make it so Paper, the minecraft server, is aware of
   // the proxy running, so it can remap connections.
   // This handles all that automatically
-  enableProxy = true,
+  enableProxy = false,
   // Enable BlueMap. This sets up a HTTPs port in your fly config, and loads bluemap
   enableBlueMap = false,
   // Configure your plugins here
   plugins = [
-    // "https://cdn.modrinth.com/data/1u6JkXh5/versions/vMrPkmgF/worldedit-bukkit-7.3.4.jar",
-    // "https://cdn.modrinth.com/data/Lu3KuzdV/versions/llmrc4cl/CoreProtect-22.4.jar",
+    "https://cdn.modrinth.com/data/P7dR8mSH/versions/bK6OgzFj/fabric-api-0.102.1%2B1.21.1.jar",
+    "https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/fabric",
+    "https://cdn.modrinth.com/data/bWrNNfkb/versions/iWEfqepR/Floodgate-Fabric-2.2.3-SNAPSHOT%2Bbuild.31.jar",
     // "https://cdn.modrinth.com/data/MubyTbnA/versions/vbGiEu4k/FreedomChat-Paper-1.6.0.jar",
     // "https://cdn.modrinth.com/data/RPOSBQgq/versions/E7jCNr0p/itemswapperplugin-0.2.1-SNAPSHOT.jar",
     // "https://ci.enginehub.org/repository/download/bt6/24948:id/craftbook-3.10.12-SNAPSHOT-dist.jar?branch=master&guest=1",
@@ -44,7 +45,7 @@ const
 
 
 const generalEnv = {
-  MAX_MEMORY: "7G",
+  MAX_MEMORY: "4G",
   TZ: "Europe/Helsinki",
   ENABLE_ROLLING_LOGS: "TRUE",
   CREATE_CONSOLE_IN_PIPE: "true",
@@ -53,7 +54,7 @@ const generalEnv = {
 
 const minecraftEnv = {
   EULA: "TRUE",
-  TYPE: "paper",
+  TYPE: "FABRIC",
   VERSION: "1.21.1",
   SERVER_NAME: "Kummituskoalition Kaivostaito",
   MOTD: "Kummituskoalition Kaivostaito",
@@ -91,19 +92,22 @@ const blueMapConfig = {
 
 const config = {
   app: "gc-minecraft",
-  primary_region: "arn",
+  primary_region: "arn", // Stockholm. See fly.io regions for more.
   build: { dockerfile: "Dockerfile" },
   mounts: {
     source: "gc_minecraft_data",
     destination: "/data",
-    initial_size: "15"
+    initial_size: "4", // Mount a 4 GB volume to store the game world and other files. Can be increased later.
   },
+  // Virtual machine specs
   vm: [{ size: "shared-cpu-4x", memory: "4gb", cpus: 4 }],
+  // Do not restart the server when it shuts down (e.g., after an error)
   restart: [{
     policy: "never",
   }],
   http_service: enableBlueMap ? blueMapConfig : null,
   services: [
+    // Open the following port for Java connections
     {
       internal_port: 25565,
       protocol: "tcp",
@@ -113,6 +117,16 @@ const config = {
         {
           port: 25565,
           ...flyProxyConf,
+        }
+      ]
+    },
+    // Open the following port for Bedrock connections
+    {
+      internal_port: 19132,
+      protocol: "udp",
+      ports: [
+        {
+          port: 19132,
         }
       ]
     }
