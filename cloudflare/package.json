@@ -1,0 +1,28 @@
+{
+  "name": "cloudflare",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "start": "wrangler dev",
+    "test": "vitest",
+    "cf-typegen": "wrangler types",
+    "tsc": "tsc",
+    "register": "npm run tsc && node dist/register.js"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.4.5",
+    "@cloudflare/workers-types": "^4.20240815.0",
+    "@dotenvx/dotenvx": "^1.7.0",
+    "node-fetch": "^3.3.2",
+    "typescript": "^5.5.2",
+    "vitest": "1.5.0",
+    "wrangler": "^3.60.3"
+  },
+  "dependencies": {
+    "discord-interactions": "^4.0.0",
+    "itty-router": "^5.0.18"
+  }
+}
