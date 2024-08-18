@@ -6,6 +6,19 @@
         "path": "$.bedrock.address",
         "value": "fly-global-services",
       }
-    }
+    },
+    {
+      "$set": {
+        "path": "$.show-coordinates",
+        "value": "false",
+        "value-type": "bool"
+      }
+    },
+    {
+      "$set": {
+        "path": "$.bedrock.server-name",
+        "value": "minecraft.misacorp.io",
+      }
+    },
   ]
 }

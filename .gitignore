@@ -1,5 +1,6 @@
 plugins/*
 fly/fly.toml
+fly/players-config
 node_modules
 .env*
 

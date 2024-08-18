@@ -1,3 +1,5 @@
+// NOTE: You need to add all these values as secrets on Cloudflare:
+// Example command: `npx wrangler secret put FLY_MACHINE_URI`
 export interface IConfig extends NodeJS.ProcessEnv {
 	FLY_MACHINE_URI: string | undefined;
 	FLY_API_TOKEN: string | undefined;

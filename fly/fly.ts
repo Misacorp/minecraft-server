@@ -18,6 +18,7 @@ const
     "https://cdn.modrinth.com/data/P7dR8mSH/versions/bK6OgzFj/fabric-api-0.102.1%2B1.21.1.jar",
     "https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/fabric",
     "https://cdn.modrinth.com/data/bWrNNfkb/versions/iWEfqepR/Floodgate-Fabric-2.2.3-SNAPSHOT%2Bbuild.31.jar",
+    "https://cdn.modrinth.com/data/rbJ7eS5V/versions/I3kp6jxL/dcintegration-fabric-3.0.7.2-1.21.jar",
     // "https://cdn.modrinth.com/data/MubyTbnA/versions/vbGiEu4k/FreedomChat-Paper-1.6.0.jar",
     // "https://cdn.modrinth.com/data/RPOSBQgq/versions/E7jCNr0p/itemswapperplugin-0.2.1-SNAPSHOT.jar",
     // "https://ci.enginehub.org/repository/download/bt6/24948:id/craftbook-3.10.12-SNAPSHOT-dist.jar?branch=master&guest=1",
@@ -68,6 +69,9 @@ const minecraftEnv = {
   ENABLE_COMMAND_BLOCK: "TRUE",
   SNOOPER_ENABLED: "FALSE",
   PATCH_DEFINITIONS: "/config_patches/",
+  WHITELIST_FILE: "/players-config/whitelist.json",
+  OPS_FILE: "/players-config/ops.json",
+  ENABLE_WHITELIST: "TRUE",
 }
 
 const autoStopEnv = {
