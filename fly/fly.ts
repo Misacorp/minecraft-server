@@ -72,6 +72,7 @@ const minecraftEnv = {
   WHITELIST_FILE: "/players-config/whitelist.json",
   OPS_FILE: "/players-config/ops.json",
   ENABLE_WHITELIST: "TRUE",
+  SEED: "89305139214612",
 }
 
 const autoStopEnv = {

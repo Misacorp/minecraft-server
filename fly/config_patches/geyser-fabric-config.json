@@ -1,0 +1,24 @@
+{
+  "file": "/data/config/Geyser-Fabric/config.yml",
+  "ops": [
+    {
+      "$put": {
+        "path": "$.bedrock",
+        "key": "address",
+        "value": "fly-global-services"
+      }
+    },
+    {
+      "$set": {
+        "path": "$.bedrock['server-name']",
+        "value": "minecraft.misacorp.io"
+      }
+    },
+    {
+      "$set": {
+        "path": "$.show-coordinates",
+        "value": false
+      }
+    }
+  ]
+}
