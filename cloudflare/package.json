@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.4.5",
-    "@cloudflare/workers-types": "^4.20240815.0",
+    "@cloudflare/workers-types": "^4.20240821.1",
     "@dotenvx/dotenvx": "^1.7.0",
     "discord-api-types": "^0.37.98",
     "node-fetch": "^3.3.2",

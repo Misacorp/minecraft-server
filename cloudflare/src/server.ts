@@ -22,8 +22,8 @@ const DISCORD_ROLES_WITH_PERMISSION: string[] = [
 /**
  * A simple :wave: hello page to verify the worker is working.
  */
-router.get("/", (request, env) => {
-	return new Response(`👋 ${env.DISCORD_APPLICATION_ID}`);
+router.get("/", () => {
+	return new Response(`👋`);
 });
 
 /**
@@ -31,7 +31,7 @@ router.get("/", (request, env) => {
  * include a JSON payload described here:
  * https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object
  */
-router.post("/", async (request, env) => {
+router.post("/", async (request, env, ctx: ExecutionContext) => {
 	const { isValid, interaction } = await server.verifyDiscordRequest(
 		request,
 		env
@@ -87,7 +87,7 @@ router.post("/", async (request, env) => {
 				return await status(env);
 			}
 			case COMMANDS.START_COMMAND.name.toLowerCase(): {
-				return await start(env);
+				return await start(request, env, ctx);
 			}
 			default:
 				console.info(
