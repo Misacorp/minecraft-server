@@ -4,8 +4,7 @@
   "description": "Minecraft server hosted on Fly.io. Can be started via a Discord bot and Cloudflare workers.",
   "scripts": {
     "deploy:fly": "cd fly && ./fly.ts && fly deploy",
-    "deploy:discord": "echo Not implemented",
-    "deploy:cloudflare": "echo Not implemented",
+    "deploy:cloudflare": "cd cloudflare && npm run deploy",
     "lint": "eslint"
   },
   "repository": {
