@@ -5,6 +5,8 @@ import {
 import type { APIInteraction } from "discord-api-types/v10";
 import { JsonResponse } from "../JsonResponse";
 import { IConfig } from "../../config";
+import startMachine from "../fly/startMachine";
+import updateDiscordInteraction from "../discord/updateDiscordInteraction";
 
 /**
  * Handles the "start server" command
@@ -26,7 +28,6 @@ export default (
 	return new JsonResponse({
 		type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
 		data: {
-			content: `Sending the start command…`,
 			flags: InteractionResponseFlags.EPHEMERAL,
 		},
 	});
@@ -38,49 +39,33 @@ export default (
  * @param env Cloudflare worker env
  */
 const startFlyMachine = async (interaction: APIInteraction, env: IConfig) => {
-	console.info("Starting the machine at", env.FLY_MACHINE_URI);
+	// Validate ENV
+	if (!env.FLY_MACHINE_URI) {
+		throw new Error("FLY_MACHINE_URI is not defined in env");
+	}
+	if (!env.FLY_API_TOKEN) {
+		throw new Error("FLY_API_TOKEN is not defined in env");
+	}
+	if (!env.DISCORD_APPLICATION_ID) {
+		throw new Error("DISCORD_APPLICATION_ID is not defined in env");
+	}
 
-	const flyResponse = await fetch(`${env.FLY_MACHINE_URI}/start`, {
-		method: "POST",
-		headers: {
-			Authorization: `Bearer ${env.FLY_API_TOKEN}`,
-		},
-	});
+	try {
+		// Try to start the machine
+		await startMachine(env.FLY_MACHINE_URI, env.FLY_API_TOKEN);
+	} catch (error: unknown) {
+		// Catch any errors and update the Discord user about them by editing the bot's original message.
+		const errorMessage =
+			error instanceof Error ? error.message : "(there was no error message)";
 
-	console.debug("Start response received");
-
-	if (!flyResponse.ok) {
-		console.warn("Fly machine response was not OK");
-		return new JsonResponse({
-			error: "Something went wrong. Try again, or don't 🤷",
+		await updateDiscordInteraction(env.DISCORD_APPLICATION_ID, interaction, {
+			content: `Something went wrong when starting the server. Here's the error message: ${errorMessage}`,
 		});
 	}
 
-	console.debug("Start request was OK");
-
+	// At this point, the Fly machine should be starting.
 	// Send an update to Discord
-	const url = `https://discord.com/api/v10/webhooks/${env.DISCORD_APPLICATION_ID}/${interaction.token}/messages/@original`;
-
-	console.debug(`Sending a PATCH request to ${url}…`);
-
-	const discordResponse = await fetch(url, {
-		method: "PATCH",
-		headers: new Headers({
-			"Content-Type": "application/json",
-		}),
-		body: JSON.stringify({
-			content: `The server is starting. Use \`/status\` for real-time information. Give it 30-90 seconds after startup is complete to load everything Minecraft related.`,
-		}),
+	await updateDiscordInteraction(env.DISCORD_APPLICATION_ID, interaction, {
+		content: `The server is starting. Use \`/status\` for real-time information. Give it 30-90 seconds after startup is complete to load everything Minecraft related.`,
 	});
-
-	if (!discordResponse.ok) {
-		console.warn("Something was wrong with the Discord response");
-
-		try {
-			const json = await discordResponse.json();
-			console.warn(JSON.stringify(json));
-		} catch {
-			console.warn("Could not parse and display Discord response as JSON");
-		}
-	}
 };
