@@ -11,3 +11,8 @@ export const START_COMMAND = {
 	name: "start",
 	description: "Start the server",
 };
+
+export const TEST_COMMAND = {
+	name: "test",
+	description: "Test command for development",
+}

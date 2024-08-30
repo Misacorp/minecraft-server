@@ -10,6 +10,7 @@ import {
 } from "discord-api-types/v10";
 import status from "./commands/status";
 import start from "./commands/start";
+import test from "./commands/test";
 
 const router: AutoRouterType = AutoRouter();
 
@@ -87,7 +88,10 @@ router.post("/", async (request, env, ctx: ExecutionContext) => {
 				return await status(env);
 			}
 			case COMMANDS.START_COMMAND.name.toLowerCase(): {
-				return await start(request, env, ctx);
+				return start(interaction, env, ctx);
+			}
+			case COMMANDS.TEST_COMMAND.name.toLowerCase(): {
+				return test(interaction, env, ctx);
 			}
 			default:
 				console.info(
