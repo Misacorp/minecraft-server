@@ -85,7 +85,7 @@ router.post("/", async (request, env, ctx: ExecutionContext) => {
 		// Most user commands will come as `APPLICATION_COMMAND`.
 		switch (interaction.data.name.toLowerCase()) {
 			case COMMANDS.STATUS_COMMAND.name.toLowerCase(): {
-				return await status(env);
+				return status(interaction, env, ctx);
 			}
 			case COMMANDS.START_COMMAND.name.toLowerCase(): {
 				return start(interaction, env, ctx);
