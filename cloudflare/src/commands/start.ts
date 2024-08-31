@@ -8,6 +8,23 @@ import { IConfig } from "../../config";
 import startMachine from "../fly/startMachine";
 import updateDiscordInteraction from "../discord/updateDiscordInteraction";
 import validateEnv from "../util/validateEnv";
+import {
+	DISCORD_ROLES_WITH_PERMISSION,
+	TRUSTED_ROLES,
+} from "../discord/guilds";
+
+const messageContentLocalizations = {
+	fi: {
+		started: `Palvelin käynnistyy. Käytä \`/status\` komentoa nähdäksesi sen tilan reaaliajassa.\n\nAnna palvelimelle käynnistymisen jälkeen 30-90 sekuntia aikaa ladata Minecraft ja kaikki siihen liittyvät resurssit.`,
+		error: `Jokin meni pieleen palvelinta käynnistettäessä. Tässä on virheviesti: `,
+		defaultErrorMessage: `(virheviestiä ei ollut)`,
+	},
+	en: {
+		started: `The server is starting. Use \`/status\` for real-time information.\n\nGive it 30-90 seconds after startup is complete to load everything Minecraft related.`,
+		error: `Something went wrong when starting the server. Here's the error message: `,
+		defaultErrorMessage: `(there was no error message)`,
+	},
+};
 
 /**
  * Handles the "start server" command
@@ -45,7 +62,24 @@ const startFlyMachine = async (interaction: APIInteraction, env: IConfig) => {
 		"FLY_MACHINE_URI",
 		"FLY_API_TOKEN",
 		"DISCORD_APPLICATION_ID",
+		"PAYMENT_ACCOUNT_NUMBER",
 	]);
+
+	// Determine which language to use based on the user's role (which server they're on)
+	// Default to English
+	let messageContent = messageContentLocalizations.en;
+
+	const memberRoles = interaction?.member?.roles ?? [];
+
+	// Finnish option
+	if (memberRoles.includes(DISCORD_ROLES_WITH_PERMISSION[0])) {
+		messageContent = messageContentLocalizations.fi;
+
+		// Add payment info to trusted members.
+		if (memberRoles.some((role) => TRUSTED_ROLES.includes(role))) {
+			messageContent.started = `${messageContent.started}\n\nPS: Palvelimen ylläpitäminen maksaa rahaa. Jos voit, laita Misalle toistuva 2-3 euron kuukausimaksu tilille \`${env.PAYMENT_ACCOUNT_NUMBER}\`. Kiitos!`;
+		}
+	}
 
 	try {
 		// Try to start the machine
@@ -53,16 +87,18 @@ const startFlyMachine = async (interaction: APIInteraction, env: IConfig) => {
 	} catch (error: unknown) {
 		// Catch any errors and update the Discord user about them by editing the bot's original message.
 		const errorMessage =
-			error instanceof Error ? error.message : "(there was no error message)";
+			error instanceof Error
+				? error.message
+				: messageContent.defaultErrorMessage;
 
 		await updateDiscordInteraction(env.DISCORD_APPLICATION_ID, interaction, {
-			content: `Something went wrong when starting the server. Here's the error message: ${errorMessage}`,
+			content: `${messageContent.error}${errorMessage}`,
 		});
 	}
 
 	// At this point, the Fly machine should be starting.
 	// Send an update to Discord
 	await updateDiscordInteraction(env.DISCORD_APPLICATION_ID, interaction, {
-		content: `The server is starting. Use \`/status\` for real-time information. Give it 30-90 seconds after startup is complete to load everything Minecraft related.`,
+		content: messageContent.started,
 	});
 };

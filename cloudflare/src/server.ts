@@ -11,14 +11,9 @@ import {
 import status from "./commands/status";
 import start from "./commands/start";
 import test from "./commands/test";
+import { DISCORD_ROLES_WITH_PERMISSION } from "./discord/guilds";
 
 const router: AutoRouterType = AutoRouter();
-
-const DISCORD_ROLES_WITH_PERMISSION: string[] = [
-	// TODO: Move these to secrets
-	"1274451784684933235", // Ultimate eSports
-	"1274460355833106505", // Ghost Coalition
-];
 
 /**
  * A simple :wave: hello page to verify the worker is working.
