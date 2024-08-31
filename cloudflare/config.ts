@@ -8,6 +8,8 @@ export interface IConfig extends NodeJS.ProcessEnv {
 	DISCORD_APPLICATION_ID: string | undefined;
 	DISCORD_PUBLIC_KEY: string | undefined;
 	DISCORD_TEST_GUILD_ID: string | undefined;
+	PIGLIN_POST_BOT_TOKEN: string | undefined;
+	PAYMENT_ACCOUNT_NUMBER: string | undefined;
 }
 
 export const Config: IConfig = {
@@ -18,4 +20,6 @@ export const Config: IConfig = {
 	DISCORD_APPLICATION_ID: process.env.DISCORD_APPLICATION_ID,
 	DISCORD_PUBLIC_KEY: process.env.DISCORD_PUBLIC_KEY,
 	DISCORD_TEST_GUILD_ID: process.env.DISCORD_TEST_GUILD_ID,
+	PIGLIN_POST_BOT_TOKEN: process.env.PIGLIN_POST_BOT_TOKEN,
+	PAYMENT_ACCOUNT_NUMBER: process.env.PAYMENT_ACCOUNT_NUMBER,
 };

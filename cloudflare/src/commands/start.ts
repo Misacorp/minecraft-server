@@ -7,6 +7,7 @@ import { JsonResponse } from "../JsonResponse";
 import { IConfig } from "../../config";
 import startMachine from "../fly/startMachine";
 import updateDiscordInteraction from "../discord/updateDiscordInteraction";
+import validateEnv from "../util/validateEnv";
 
 /**
  * Handles the "start server" command
@@ -39,16 +40,12 @@ export default (
  * @param env Cloudflare worker env
  */
 const startFlyMachine = async (interaction: APIInteraction, env: IConfig) => {
-	// Validate ENV
-	if (!env.FLY_MACHINE_URI) {
-		throw new Error("FLY_MACHINE_URI is not defined in env");
-	}
-	if (!env.FLY_API_TOKEN) {
-		throw new Error("FLY_API_TOKEN is not defined in env");
-	}
-	if (!env.DISCORD_APPLICATION_ID) {
-		throw new Error("DISCORD_APPLICATION_ID is not defined in env");
-	}
+	// Ensure required env properties are defined
+	validateEnv(env, [
+		"FLY_MACHINE_URI",
+		"FLY_API_TOKEN",
+		"DISCORD_APPLICATION_ID",
+	]);
 
 	try {
 		// Try to start the machine
