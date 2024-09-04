@@ -12,6 +12,11 @@ export const START_COMMAND = {
 	description: "Start the server",
 };
 
+export const PAYMENT = {
+	name: "payment",
+	description: "Find out how to pay for the Minecraft server",
+}
+
 export const TEST_COMMAND = {
 	name: "test",
 	description: "Test command for development",

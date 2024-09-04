@@ -12,6 +12,7 @@ import status from "./commands/status";
 import start from "./commands/start";
 import test from "./commands/test";
 import { DISCORD_ROLES_WITH_PERMISSION } from "./discord/guilds";
+import payment from "./commands/payment";
 
 const router: AutoRouterType = AutoRouter();
 
@@ -84,6 +85,9 @@ router.post("/", async (request, env, ctx: ExecutionContext) => {
 			}
 			case COMMANDS.START_COMMAND.name.toLowerCase(): {
 				return start(interaction, env, ctx);
+			}
+			case COMMANDS.PAYMENT.name.toLowerCase(): {
+				return payment(interaction, env);
 			}
 			case COMMANDS.TEST_COMMAND.name.toLowerCase(): {
 				return test(interaction, env, ctx);
